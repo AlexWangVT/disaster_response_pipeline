@@ -1,23 +1,69 @@
+from heapq import merge
 import sys
+import re
+import nltk
+nltk.download(['punkt', 'wordnet', 'averaged_perceptron_tagger', 'stopwords', 'omw-1.4'])
+import pandas as pd
+import numpy as np
+from sqlalchemy import create_engine
 
 
 def load_data(messages_filepath, categories_filepath):
-    pass
+    '''
+    Load raw data from messages and categories csv file and merge them
+    category_df - Response variable
+    message_df - Independent variable
+    merge_df - merged dataframe
+    '''
+    category_df = pd.read_csv(categories_filepath)
+    message_df = pd.read_csv(messages_filepath)
+
+    merge_df = category_df.merge(message_df, on='id')
+
+    return merge_df
 
 
 def clean_data(df):
-    pass
+    '''
+    This function is used for data preprocessing which includes multiple steps:
+    1. extract the column of the response variable.
+    2. select the first row of the categories dataframe and use this row to extract a list of new column names for categories.
+    3. convert category value to numbers 0 or 1
+    '''
+    categories = df.categories.str.split(";", expand=True)
+    
+    # select the first row of the categories dataframe
+    row = categories.loc[0]
+
+    # extract a list of new column names for categories
+    category_colnames = [re.sub(r"[^a-zA-Z]", "", text) for text in row]
+    categories.columns = category_colnames
+
+    # convert category values to numeric data type
+    for column in categories:
+        categories[column] = categories[column].str[-1]
+        categories[column] = pd.to_numeric(categories[column]).astype('Int64')
+
+    df = df.drop(['categories', 'genre', 'original'], axis=1)
+    df = pd.concat([df, categories], axis=1)
+
+    df = df.drop_duplicates()
+
+    return df
 
 
 def save_data(df, database_filename):
-    pass  
+    '''
+    save the the cleaned data to sql database
+    '''
+    engine = create_engine('sqlite:///DisasterResponse.db')
+    df.to_sql('jwang_disaster_pipeline', engine, index=False, if_exists="replace")
 
 
 def main():
     if len(sys.argv) == 4:
 
         messages_filepath, categories_filepath, database_filepath = sys.argv[1:]
-
         print('Loading data...\n    MESSAGES: {}\n    CATEGORIES: {}'
               .format(messages_filepath, categories_filepath))
         df = load_data(messages_filepath, categories_filepath)
