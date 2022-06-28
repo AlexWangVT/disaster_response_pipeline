@@ -16,10 +16,10 @@ def load_data(messages_filepath, categories_filepath):
     merge_df - merged dataframe
     '''
     category_df = pd.read_csv(categories_filepath)
+    category_df.replace(2, 1)
     message_df = pd.read_csv(messages_filepath)
-
     merge_df = category_df.merge(message_df, on='id')
-
+    
     return merge_df
 
 
@@ -44,9 +44,14 @@ def clean_data(df):
         categories[column] = categories[column].str[-1]
         categories[column] = pd.to_numeric(categories[column]).astype('Int64')
 
+    # replace value 2 by 1
+    categories = categories.replace(2, 1)
+
+    # Drop the original categories column and the other two unused columns
     df = df.drop(['categories', 'genre', 'original'], axis=1)
     df = pd.concat([df, categories], axis=1)
-
+    
+    # drop duplicates
     df = df.drop_duplicates()
 
     return df

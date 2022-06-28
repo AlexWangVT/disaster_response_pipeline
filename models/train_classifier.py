@@ -37,8 +37,10 @@ def tokenize(text):
     tokenize the text data
     '''
 
-    # replace the characters which are not letters and numbers including punctua
+    # replace the characters which are not letters and numbers including punctuation
     tokens = word_tokenize(re.sub(r"[^a-zA-Z0-9]", " ", text))
+
+    # lemmatize the tokens and remove stop words
     lemmatizer = WordNetLemmatizer()
     clean_tokens = [lemmatizer.lemmatize(w, pos='v').lower().strip() for w in tokens if w not in stopwords.words("english")]
 
@@ -47,6 +49,11 @@ def tokenize(text):
 
 
 def build_model():
+    '''
+    this is a function to build machine learning model pipeline, set hyper-parameters, and configure GridSearch.
+    '''
+
+    # build model pipeline
     pipeline = Pipeline(
         [
             ('vect', CountVectorizer(tokenizer=tokenize)),
@@ -56,25 +63,31 @@ def build_model():
     )
 
     parameters = {
-        'clf__estimator__criterion': ['gini'],
-        'clf__estimator__max_depth': [4]
+        'clf__estimator__criterion': ['gini', 'entropy'],
+        'clf__estimator__max_depth': [4, 5, 6]
     }
 
+    # configure gridSearch for hyperparameters tuning
     cv = GridSearchCV(pipeline, param_grid=parameters)
 
     return cv
 
 
 def evaluate_model(model, X_test, Y_test):
+    '''
+    test the model using classification_report which provides accuracy, f1 score, precision, and recall.
+    '''
     Y_pred = model.predict(X_test)
-    Y_test = np.argmax(Y_test, axis = 1)
-    report = classification_report(Y_test, Y_pred)
+    report = classification_report(Y_test, Y_pred, labels=np.unique(Y_pred))
     print(report)
     print("\nBest Parameters:", model.best_params_)
 
 
 def save_model(model, model_filepath):
-    f = open('disaster_response_model.pkl', 'wb')
+    '''
+    save the trained model.
+    '''
+    f = open(model_filepath, 'wb')
     pickle.dump(model, f)
     f.close()
 
