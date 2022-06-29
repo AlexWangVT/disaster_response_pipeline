@@ -28,7 +28,7 @@ def load_data(database_filepath):
     engine = create_engine('sqlite:///' + database_filepath)
     df = pd.read_sql('SELECT * FROM jwang_disaster_pipeline', engine)
     X = df.message.values
-    Y = df.drop(['id', 'message'], axis=1).values
+    Y = df.drop(['id', 'message', 'original', 'genre'], axis=1).values
 
     return X, Y
 
