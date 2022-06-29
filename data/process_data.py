@@ -47,8 +47,8 @@ def clean_data(df):
     # replace value 2 by 1
     categories = categories.replace(2, 1)
 
-    # Drop the original categories column and the other two unused columns
-    df = df.drop(['categories', 'genre', 'original'], axis=1)
+    # Drop the original categories column
+    df = df.drop(['categories'], axis=1)
     df = pd.concat([df, categories], axis=1)
     
     # drop duplicates
