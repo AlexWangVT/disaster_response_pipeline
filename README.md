@@ -20,8 +20,8 @@ This project builds an ETL pipeline to process disaster response data, establish
 
 * app \
 |- template \
-||- go.htlm # classification result page of web app \
-||- master.html # main page of web app \
+| |- go.htlm # classification result page of web app \
+| |- master.html # main page of web app \
 |- run.py # Flask file that runs app 
 * data \
 |- disaster_categories.csv # data to process \
