@@ -1,6 +1,7 @@
 import sys
 import re
 import sys
+import time
 import pickle
 import nltk
 nltk.download(['punkt', 'wordnet', 'averaged_perceptron_tagger', 'stopwords', 'omw-1.4'])
@@ -63,8 +64,8 @@ def build_model():
     )
 
     parameters = {
-        'clf__estimator__criterion': ['gini', 'entropy'],
-        'clf__estimator__max_depth': [4, 5, 6]
+        'clf__estimator__n_estimators': [10],
+        'clf__estimator__min_samples_split': [2]
     }
 
     # configure gridSearch for hyperparameters tuning
@@ -78,7 +79,7 @@ def evaluate_model(model, X_test, Y_test):
     test the model using classification_report which provides accuracy, f1 score, precision, and recall.
     '''
     Y_pred = model.predict(X_test)
-    report = classification_report(Y_test, Y_pred, labels=np.unique(Y_pred))
+    report = classification_report(Y_test, Y_pred)
     print(report)
     print("\nBest Parameters:", model.best_params_)
 
@@ -121,4 +122,8 @@ def main():
 
 
 if __name__ == '__main__':
+    start = time.time()
     main()
+    end = time.time()
+    exec_time = end - start
+    print("The execution time is: {}".format(exec_time))
