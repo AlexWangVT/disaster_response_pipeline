@@ -18,22 +18,22 @@ This project builds an ETL pipeline to process disaster response data, establish
 
 ### Files in the repository 
 
-* app
-|- template
-||- go.htlm # classification result page of web app
-||- master.html # main page of web app
-|- run.py # Flask file that runs app
-* data 
-|- disaster_categories.csv # data to process
-|- disaster_messages.csv # data to process
-|- DisasterResponse.db # databased used to store cleaned data
-|- process_data.py 
+* app \
+|- template \
+||- go.htlm # classification result page of web app \
+||- master.html # main page of web app \
+|- run.py # Flask file that runs app 
+* data \
+|- disaster_categories.csv # data to process \
+|- disaster_messages.csv # data to process \
+|- DisasterResponse.db # databased used to store cleaned data \ 
+|- process_data.py \
 |- process_data.ipynb  # the jupyter script used for data exploratory analysis
-* models
-|- train_classifier.py
-|- train_classifier.ipynb  # jupyter script used to build and test ML model step-by-step
-|- disaster_response_model.pkl # saved model
-|- DisasterResponse.db # databased used to store cleaned data
+* models \
+|- train_classifier.py \
+|- train_classifier.ipynb  # jupyter script used to build and test ML model step-by-step \
+|- disaster_response_model.pkl # saved model \
+|- DisasterResponse.db # databased used to store cleaned data \
 * README.md
 
 
