@@ -25,7 +25,7 @@ def load_data(database_filepath):
     '''
     load the data from sql database, and split the dataframe into X (independent variable) and Y (response).
     '''
-    engine = create_engine('sqlite:///DisasterResponse.db')
+    engine = create_engine('sqlite:///' + database_filepath)
     df = pd.read_sql('SELECT * FROM jwang_disaster_pipeline', engine)
     X = df.message.values
     Y = df.drop(['id', 'message'], axis=1).values
@@ -64,7 +64,7 @@ def build_model():
     )
 
     parameters = {
-        'clf__estimator__n_estimators': [10],
+        'clf__estimator__n_estimators': [5],
         'clf__estimator__min_samples_split': [2]
     }
 

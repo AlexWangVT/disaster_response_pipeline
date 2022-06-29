@@ -61,7 +61,7 @@ def save_data(df, database_filename):
     '''
     save the the cleaned data to sql database
     '''
-    engine = create_engine('sqlite:///DisasterResponse.db')
+    engine = create_engine('sqlite:///' + database_filename)
     df.to_sql('jwang_disaster_pipeline', engine, index=False, if_exists="replace")
 
 
