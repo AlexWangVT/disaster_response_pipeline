@@ -40,9 +40,21 @@ def index():
     
     # extract data needed for visuals
     # TODO: Below is an example - modify to extract data for your own visuals
+
+    # default genre visual
     genre_counts = df.groupby('genre').count()['message']
     genre_names = list(genre_counts.index)
     
+    # aggregation results grouping by medical help
+    med_help_counts = df.groupby('medicalhelp').count()['message']
+    med_help_counts.index = ['non-medical-help-message', 'medical-help-message']
+    med_help_names = list(med_help_counts.index)
+
+    # aggregation results grouping by earthquake
+    earthquake_counts = df.groupby('earthquake').count()['message']
+    earthquake_counts.index = ['non-earthquake-message', 'earthquake-message']
+    earthquake_names = list(earthquake_counts.index)    
+
     # create visuals
     # TODO: Below is an example - modify to create your own visuals
     graphs = [
@@ -61,6 +73,42 @@ def index():
                 },
                 'xaxis': {
                     'title': "Genre"
+                }
+            }
+        },
+        {
+            'data': [
+                Bar(
+                    x=med_help_names,
+                    y=med_help_counts
+                )
+            ],
+
+            'layout': {
+                'title': 'Distribution of Medical Help Message',
+                'yaxis': {
+                    'title': "Count"
+                },
+                'xaxis': {
+                    'title': "message type"
+                }
+            }
+        },
+        {
+            'data': [
+                Bar(
+                    x=earthquake_names,
+                    y=earthquake_counts
+                )
+            ],
+
+            'layout': {
+                'title': 'Distribution of Earthquake Message',
+                'yaxis': {
+                    'title': "Count"
+                },
+                'xaxis': {
+                    'title': "message type"
                 }
             }
         }
